@@ -1,7 +1,6 @@
 package com.example;
 
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -30,13 +29,6 @@ public class TestHBase {
 		if(args.length > 1) {
 			hbaseSiteConfigFilePath = args[1];
 			config.addResource(hbaseSiteConfigFilePath);
-		}
-
-		//Load log4j config file
-		URL log4jConfig = null;
-		log4jConfig = TestHBase.class.getResource("/log4j.properties");
-		if(log4jConfig != null) {
-			config.addResource(log4jConfig);
 		}
 
 		// Next you need a Connection to the cluster. Create one. When done with it,
