@@ -26,10 +26,11 @@ public class TestHBase {
 
 		//override default config with actual file passed as program argument
 		String hbaseSiteConfigFilePath = null;
-		if(args.length > 1) {
-			hbaseSiteConfigFilePath = args[1];
+		if(args.length >= 1) {
+			hbaseSiteConfigFilePath = args[0];
 			config.addResource(hbaseSiteConfigFilePath);
 		}
+		
 
 		// Next you need a Connection to the cluster. Create one. When done with it,
 		// close it. A try/finally is a good way to ensure it gets closed or use
@@ -43,6 +44,14 @@ public class TestHBase {
 		// close when done.
 		//
 		Connection connection = ConnectionFactory.createConnection(config);
+		
+		//Create table
+		final String TABLE = "table1";
+		final String FAMILY1 = "family1";
+		final String FAMILY2 = "family2";
+		final String FAMILY3 = "family3";
+		HBaseOps.createTable(connection, TABLE, FAMILY1, FAMILY2, FAMILY3);
+		
 		try {
 
 			// The below instantiates a Table object that connects you to the "myLittleHBaseTable" table
@@ -50,9 +59,11 @@ public class TestHBase {
 			// When done with it, close it (Should start a try/finally after this creation so it gets
 			// closed for sure the jdk7 idiom, try-with-resources: see
 			// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
-			Table table = connection.getTable(TableName.valueOf("myLittleHBaseTable"));
+			Table table = connection.getTable(TableName.valueOf(TABLE));
 			try {
 
+				final String ROWS = "row1";
+				
 				// To add to a row, use Put.  A Put constructor takes the name of the row
 				// you want to insert into as a byte array.  In HBase, the Bytes class has
 				// utility for converting all kinds of java types to byte arrays.  In the
