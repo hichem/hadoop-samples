@@ -30,7 +30,7 @@ public class TestHBase {
 			hbaseSiteConfigFilePath = args[0];
 			config.addResource(hbaseSiteConfigFilePath);
 		}
-		
+
 
 		// Next you need a Connection to the cluster. Create one. When done with it,
 		// close it. A try/finally is a good way to ensure it gets closed or use
@@ -44,14 +44,19 @@ public class TestHBase {
 		// close when done.
 		//
 		Connection connection = ConnectionFactory.createConnection(config);
-		
+
 		//Create table
-		final String TABLE = "table1";
+		final String TABLE1 = "table1";
 		final String FAMILY1 = "family1";
 		final String FAMILY2 = "family2";
+		HBaseOps.createTable(connection, TABLE1, FAMILY1, FAMILY2);
+
+		//Create table
+		final String TABLE2 = "table2";
 		final String FAMILY3 = "family3";
-		HBaseOps.createTable(connection, TABLE, FAMILY1, FAMILY2, FAMILY3);
-		
+		final String FAMILY4 = "family4";
+		HBaseOps.createTable(connection, TABLE2, FAMILY3, FAMILY4);
+
 		try {
 
 			// The below instantiates a Table object that connects you to the "myLittleHBaseTable" table
@@ -59,11 +64,18 @@ public class TestHBase {
 			// When done with it, close it (Should start a try/finally after this creation so it gets
 			// closed for sure the jdk7 idiom, try-with-resources: see
 			// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
-			Table table = connection.getTable(TableName.valueOf(TABLE));
+			Table table = connection.getTable(TableName.valueOf(TABLE1));
 			try {
 
-				final String ROWS = "row1";
-				
+				final String ROW1 = "row1";
+				final String ROW2 = "row2";
+				final String FAMILY1_COLUMN1 = "column1";
+				final String FAMILY2_COLUMN2 = "column2";
+				final String ROW1_COLUMN1_VALUE1 = "abc";
+				final String ROW1_COLUMN2_VALUE1 = "def";
+				final String ROW1_COLUMN1_VALUE2 = "ghi";
+				final String ROW1_COLUMN2_VALUE2 = "jkl";
+
 				// To add to a row, use Put.  A Put constructor takes the name of the row
 				// you want to insert into as a byte array.  In HBase, the Bytes class has
 				// utility for converting all kinds of java types to byte arrays.  In the
@@ -72,7 +84,7 @@ public class TestHBase {
 				// adorn it by setting the names of columns you want to update on the row,
 				// the timestamp to use in your update, etc. If no timestamp, the server
 				// applies current time to the edits.
-				Put p = new Put(Bytes.toBytes("myLittleRow"));
+				Put p = new Put(Bytes.toBytes(ROW1));
 
 				// To set the value you'd like to update in the row 'myLittleRow', specify
 				// the column family, column qualifier, and value of the table cell you'd
@@ -81,7 +93,8 @@ public class TestHBase {
 				// arrays as hbase is all about byte arrays.  Lets pretend the table
 				// 'myLittleHBaseTable' was created with a family 'myLittleFamily'.
 				//p.add(Bytes.toBytes("myLittleFamily"), Bytes.toBytes("someQualifier"), Bytes.toBytes("Some Value"));
-				p.addColumn(Bytes.toBytes("myLittleFamily"), Bytes.toBytes("someQualifier"), Bytes.toBytes("Some Value"));
+				p.addColumn(Bytes.toBytes(FAMILY1), Bytes.toBytes(FAMILY1_COLUMN1), Bytes.toBytes(ROW1_COLUMN1_VALUE1));
+				p.addColumn(Bytes.toBytes(FAMILY2), Bytes.toBytes(FAMILY2_COLUMN2), Bytes.toBytes(ROW1_COLUMN2_VALUE1));
 
 				// Once you've adorned your Put instance with all the updates you want to
 				// make, to commit it do the following (The HTable#put method takes the
@@ -89,13 +102,18 @@ public class TestHBase {
 				// hbase)
 				table.put(p);
 
+				//Add next row
+				p = new Put(Bytes.toBytes(ROW2));
+				p.addColumn(Bytes.toBytes(FAMILY1), Bytes.toBytes(FAMILY1_COLUMN1), Bytes.toBytes(ROW1_COLUMN1_VALUE2));
+				p.addColumn(Bytes.toBytes(FAMILY2), Bytes.toBytes(FAMILY2_COLUMN2), Bytes.toBytes(ROW1_COLUMN2_VALUE2));
+				table.put(p);
+
 				// Now, to retrieve the data we just wrote. The values that come back are
 				// Result instances. Generally, a Result is an object that will package up
 				// the hbase return into the form you find most palatable.
-				Get g = new Get(Bytes.toBytes("myLittleRow"));
+				Get g = new Get(Bytes.toBytes(ROW1));
 				Result r = table.get(g);
-				byte [] value = r.getValue(Bytes.toBytes("myLittleFamily"),
-						Bytes.toBytes("someQualifier"));
+				byte [] value = r.getValue(Bytes.toBytes(FAMILY1), Bytes.toBytes(FAMILY1_COLUMN1));
 
 				// If we convert the value bytes, we should get back 'Some Value', the
 				// value we inserted at this location.
@@ -107,7 +125,7 @@ public class TestHBase {
 				// of the table.  To set up a Scanner, do like you did above making a Put
 				// and a Get, create a Scan.  Adorn it with column names, etc.
 				Scan s = new Scan();
-				s.addColumn(Bytes.toBytes("myLittleFamily"), Bytes.toBytes("someQualifier"));
+				s.addColumn(Bytes.toBytes(FAMILY2), Bytes.toBytes(FAMILY2_COLUMN2));
 				ResultScanner scanner = table.getScanner(s);
 				try {
 					// Scanners return Result instances.
