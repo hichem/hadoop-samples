@@ -1,0 +1,3 @@
+sqoop eval --connect jdbc:mysql://localhost/employees --username root --password password --query "SELECT * FROM employees LIMIT 10"
+
+sqoop import --connect jdbc:mysql://localhost/employees --username root --password password --table employees --hive-import --create-hive-table --hive-table employees.employees
