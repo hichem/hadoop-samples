@@ -1,0 +1,26 @@
+r_regionkey|r_name|r_comment|r_nations(inferieur)n_nationkey,n_name,n_comment(superieur)
+1|AFRICA|Good Business Region for eliteformation.fr|0,Cameroon,Reference site http://www.QuickTechie.com
+1|AFRICA|Good Business Region for Trainning4Exam.com|5,Egypt,Reference site http://www.eliteformation.fr
+1|AFRICA|Good Business Region for eliteformation.fr|14,Namibia, Reference site http://www.QuickTechie.com
+1|AFRICA|Good Business Region for Trainning4Exam.com|15,Zimbabwe, Reference site http://www.QuickTechie.com
+1|AFRICA|Good Business Region for eliteformation.fr|16,Uganda, Reference site http://www.QuickTechie.com
+2|AMERICA|Average Business Region for eliteformation.fr|1, United States, Reference site http://www.eliteformation.fr
+2|AMERICA|Average Business Region for Trainning4Exam.com|2, Canada, Reference site http://www.eliteformation.fr
+2|AMERICA|Average Business Region for eliteformation.fr|3,Cuba, Reference site http://www.QuickTechie.com
+2|AMERICA|Average Business Region for Trainning4Exam.com|17,Costa Rica, Reference site http://www.eliteformation.fr
+2|AMERICA|Average Business Region for eliteformation.fr|24, Panama, Reference site http://www.eliteformation.fr
+3|ASIA|Best Business Region for Trainning4Exam.com|8,India,Reference site http://www.QuickTechie.com
+3|ASIA|Best Business Region for eliteformation.fr|9, China, Reference site http://www.eliteformation.fr
+3|ASIA|Best Business Region for Trainning4Exam.com|12, Japan, Reference site http://www.QuickTechie.com
+3|ASIA|Best Business Region for eliteformation.fr|18, Russia, Reference site http://www.eliteformation.fr
+3|ASIA|Best Business Region for Trainning4Exam.com|21, Israel, Reference site http://www.QuickTechie.com
+4|EUROPE|Low sale Business Region for eliteformation.fr|6, Austria, Reference site http://www.eliteformation.fr
+4|EUROPE|Low sale Business Region for Trainning4Exam.com|7,Bulgaria, Reference site http://www.QuickTechie.com
+4|EUROPE|Low sale Business Region for eliteformation.fr|19, Belgium, Reference site http://www.eliteformation.fr
+4|EUROPE|Low sale Business Region for Trainning4Exam.com|22, Croatia, Reference site http://www.QuickTechie.com
+4|EUROPE|Low sale Business Region for eliteformation.fr|23, Denmark, Reference site http://www.eliteformation.fr
+5|MIDDLE EAST|OK OK Sale Business Region for eliteformation.fr|4, Saudi Arabia, Reference site http://www.QuickTechie.com
+5|MIDDLE EAST|OK OK Sale Business Region for Trainning4Exam.com|10, Yemen, Reference site http://www.eliteformation.fr
+5|MIDDLE EAST|OK OK Sale Business Region for eliteformation.fr|11, Oman , Reference site http://www.QuickTechie.com
+5|MIDDLE EAST|OK OK Sale Business Region for Trainning4Exam.com|13, kuwait, Reference site http://www.eliteformation.fr
+5|MIDDLE EAST|OK OK Sale Business Region for eliteformation.fr|20, Qatar , Reference site http://www.QuickTechie.com
