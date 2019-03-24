@@ -1,26 +1,4 @@
-## Q1
-You have been given MySql retail db database. Please import all the tables in HADOOPEXAMDB using Sqoop
-
-### A1
-sqoop import-all-tables jdbc:mysql://localhost/retaildb --username user --password password --target-dir HADOOPEXAMDB
-
-## Q2 
-You have following table structure in hive/impala: Table Name: he_order_items; columns: order_item_id int order_item_product int order_item_quantity tinyint order_item_subtotal double order_item_product_price double
-
-1-Calculate the minimum, maximum and average of order_item_product_price.
-2-Now find approximately the median of 'order_item_product_price'.
-3-Count the all values higher than appx_median value
-4-Count the all values lower than appx_median value.
-5-Calculate appx_median of order_item_product_price where order_item_product_price between 20 and 80
-
-### A2
-1- select min(order_item_product_price), max(order_item_product_price), avg(order_item_product_price) from he_order_items;
-2- select appx_median(order_item_product_price) from he_order_items;
-3- select count(order_item_product_price) from he_order_items where order_item_product_price >= (select appx_median(order_item_product_price) from he_order_items);
-4- select count(order_item_product_price) from he_order_items where order_item_product_price < (select appx_median(order_item_product_price) from he_order_items);
-5- select appx_median(order_item_product_price) from he_order_items where order_item_product_price between 20 and 80 
-
-## Q3
+## Questions
 Please accomplish following actvities:
 1- Create a table region with fololowing structure. The underline file format should be Parquet in HDFS
 r_regionkey smallint,
@@ -59,3 +37,52 @@ r_regionkey|r_name|r_comment|r_nations(inferieur)n_nationkey,n_name,n_comment(su
 
 3- Now calculate number of nations keys, total of nations keys, average of nations keys, minimum and maximum of nation name also find count of distinct nations. This calculation should be region specific
 
+## Solution
+### Q1
+create table region (
+r_regionkey smallint,
+r_name string,
+r_comment string,
+r_nations array<struct<n_nationkey : smallint, n_name : string, n_comment : string>>)
+row format delimited
+fields terminated by '|'
+lines terminated by '\n'
+stored as parquet file;
+
+### Q2
+Create a temptable first.
+Create table tempregion(data string);
+Now load data in this table.
+Load data inpath Vusericloudera/hadoopexam_101/region.csv' into table tempregion 
+Now create a select statement, which will split the data for each row in requested format.
+SELECT split(data,'\\|')[0] r_regionkey 
+, split(data,'\\|')[1] r_name
+, split(data,'\\|')[2] r_comment 
+, split(split(data.'\\|'[3],",")[0] n_nationkey 
+, split(split(data,'\\|'[3].",")[1] n_name
+, split(split(data,'\\|'),",")[2] n_comment 
+From tempregion;
+Now create an insert statement, which will load data in this table.(It will take sometime based on volume of data)
+insert overwrite table region
+SELECT split(data,'\\|')[0] r_regionkey
+, split(data,'\\|')[1] r_name
+, split(data,'\\|')[2] r_comment
+, array(named_struct( "n_nationkey". cast(split(split(data,'\\|')[3],",")[0] as smallint) , "n_name" , split(split(data,'\\|')[3],",")[1] , "n_comment" , split(split(data,'\\|')[3],",")[2]
+
+Check whether data have been loaded or not.
+SELECT * from region;
+Now use impala-shell or Hue to refrech metadata
+invalidate metadata;
+
+### Q3
+select
+r_name,
+count(r_nations.item.n_nationkey) as count,
+sum(r_nations.item.n_nationkey) as total,
+avg(r_nations.item.n_nationkey) as average,
+min(r_nations.item.n_name) as minimum,
+max(r_nations.item.n_name) as maximum,
+ndv(r_nations.item.n_nationkey) as nations_count
+from region, region.r_nations as r_nations
+group by r_name
+order by r_name
