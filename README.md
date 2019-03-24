@@ -2,3 +2,4 @@
 * Hive
 * HBase
 * MapReduce
+* Sqoop
