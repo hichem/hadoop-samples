@@ -1,3 +1,4 @@
-Sample Hadoop Projects
+## Sample Hadoop Projects
+* Hive
 * HBase
 * MapReduce
