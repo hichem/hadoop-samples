@@ -1,4 +1,4 @@
-## Q4
+## Questions
 Create table in Hive/Impala, with below definitions.
 HadoopExamint(x int, property string);
 Then accomplish following activities ;

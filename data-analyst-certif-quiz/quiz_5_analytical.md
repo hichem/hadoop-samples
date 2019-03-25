@@ -1,4 +1,4 @@
-## Q5
+## Questions
 Create a table named HadoopExamint with two columns as (value int, property string), insert values between 1 to 10 also set the property whether they are odd or even and accomplish following activities.
 1. Without using GROUP BY function calculate the count of even and odd numbers
 2. Count odd and even number using group by function.
